@@ -4,7 +4,7 @@ defmodule Dress.Config do
   """
 
   @dir Path.expand "~/.dress/"
-  @ext ".yml"
+  @ext ".json"
 
   @doc """
   Returns a path to the directory where config files located.
@@ -25,8 +25,9 @@ defmodule Dress.Config do
     { :error, reason }
   """
   def load(path) do
-    loaded = YamlElixir.read_from_file(path, atoms: true)
-    |> Map.get("dress")
+    config_json = File.read!(path)
+    loaded = Poison.Parser.parse!(config_json, keys: :atoms)
+    |> Map.get(:dress)
     |> Enum.reduce([], fn {_, entry}, acc ->
         [ load_config_entry(entry) | acc ]
       end)
@@ -58,13 +59,14 @@ defmodule Dress.Config do
       { :ok, files } ->
         case search_file(name, files) do
           f when is_binary(f) -> { :ok, Path.join [dir, f] }
-          _ -> handle_error "'#{name}.yml' not found in '#{dir}'"
+          _ -> handle_error "'#{name}.json' not found in '#{dir}'"
         end
       { :error, _ } -> ls
     end
   end
 
   defp handle_error(x) do
+    IO.inspect(x)
     reason = case x do
       x when is_binary(x)             -> "Config can't be loaded: #{x}"
       %{ message: message }           -> "Config can't be loaded: #{message}"
@@ -77,7 +79,7 @@ defmodule Dress.Config do
 
   defp load_config_entry(entry) when is_map(entry) do
     for { key, val } <- entry, into: %{} do
-      key = String.to_atom(key)
+      #key = String.to_atom(key)
       case key do
         :regex -> { key, Regex.compile!(val) }
         _      -> { key, val }

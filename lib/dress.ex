@@ -46,9 +46,9 @@ defmodule Dress do
           %{ disabled: true }               -> acc
           %{ regex: regex, skip: true }     -> acc |> skip(regex)
           %{ regex: _,     replace: _ }     -> acc |> replace(entry, [])
-          %{ regex: regex, color: color }   -> acc |> colorize(regex, [color], [])
-          %{ regex: regex, format: format } -> acc |> colorize(regex, format, [])
-          %{ regex: regex, colors: colors } -> acc |> colorize(regex, colors, [])
+          %{ regex: regex, color: color }   -> acc |> colorize(regex, [String.to_atom(color)], [])
+          %{ regex: regex, format: format } -> acc |> colorize(regex, format|>Enum.map(&(String.to_atom(&1))), [])
+          %{ regex: regex, colors: colors } -> acc |> colorize(regex, colors|>Enum.map(&(String.to_atom(&1))), [])
           _                                 -> acc
         end
       end)
