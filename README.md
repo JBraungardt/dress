@@ -1,14 +1,21 @@
-<img src='https://media.githubusercontent.com/media/veelenga/ss/master/dress/logo.png' width='100' align='right'>
+<img src='https://github.com/veelenga/bin/raw/master/dress/logo.png' width='100' align='right'>
 
 # Dress [![Build Status](https://travis-ci.org/veelenga/dress.svg?branch=master)](https://travis-ci.org/veelenga/dress)
 
 Cli app that makes your stdout fancy.
 
-![](https://media.githubusercontent.com/media/veelenga/ss/master/dress/demo.gif)
+![](https://raw.githubusercontent.com/veelenga/bin/master/dress/demo.gif)
 
 For now you need to create your own configuration file using [this](https://github.com/veelenga/dress/blob/master/config/default.yml) example.
 
 ## Installation
+
+Via `brew`:
+
+```sh
+$ brew tap veelenga/tap
+$ brew install dress
+```
 
 Manually:
 
